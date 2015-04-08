@@ -141,7 +141,7 @@ namespace Project1 {
 		Brush^ WhiteBrush;
 		Brush^ GreyBrush;
 		Bitmap^ X = gcnew Bitmap("Graphics/X.bmp");
-		Bitmap^ Y = gcnew Bitmap("Graphics/Y.bmp");
+		Bitmap^ O = gcnew Bitmap("Graphics/O.bmp");
 
 		/*
 		int height = pictureBox1->Height;
@@ -188,7 +188,7 @@ private: System::Void pictureBox1_Click(System::Object^  sender, System::EventAr
 private: System::Void M(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 
 
-
+			 /*
 			 bool shouldDraw = control.getStart();
 
 			 /*
@@ -201,7 +201,7 @@ private: System::Void M(System::Object^  sender, System::Windows::Forms::MouseEv
 			 g->FillRectangle(WhiteBrush, WhiteRect);
 			 }
 
-			 */
+			 
 
 
 			 int ax;
@@ -233,12 +233,13 @@ private: System::Void M(System::Object^  sender, System::Windows::Forms::MouseEv
 
 			 }
 
-
+			 */
 }
 
 
 private: System::Void M_Click(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 
+			 int move = control.getCount();
 
 			 int x = e->X - (e->X % cell_height);
 			 int y = e->Y - (e->Y % cell_height);
@@ -259,13 +260,15 @@ private: System::Void M_Click(System::Object^  sender, System::Windows::Forms::M
 
 			 int status = CellArray[ax, ay]->getStat();
 
-			 if (control.getStart() && status != 0 && status != 3){
+			 if (control.getStart() /*&& status == 0 && status != 3*/){
 
-				 if (control.getCount() % 2 == 0){
-					 g->DrawImage(X, x, y, cell_height, cell_height);
+				 if (control.getCount() == 0){
+					 g->DrawImage(X, x + 1, y + 1, cell_height - 2, cell_height - 2);
+					 control.setCount(move + 1);
 				 }
-				 else if (control.getCount() % 2 != 0){
-					 g->DrawImage(Y, x, y, cell_height, cell_height);
+				 else if (control.getCount() == 1){
+					 g->DrawImage(O, x + 1, y + 1, cell_height - 2, cell_height - 2);
+					 control.setCount(move - 1);
 				 }
 
 			 }
