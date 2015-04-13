@@ -28,3 +28,10 @@ int controller::getCount(){
 void controller::setCount(int num){
 	gameCount = gameCount + num;
 }
+
+int controller::getType(){
+	return gameType;
+}
+void controller::setType(int type){
+	gameType = type;
+}

@@ -41,6 +41,8 @@ namespace Project1 {
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::ToolStripMenuItem^  newGameToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  vsHumanToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  vsComputerToolStripMenuItem;
 
 	private:
 		/// <summary>
@@ -58,6 +60,8 @@ namespace Project1 {
 			this->MenuBar = (gcnew System::Windows::Forms::MenuStrip());
 			this->aToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->newGameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->vsHumanToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->vsComputerToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->MenuBar->SuspendLayout();
@@ -87,15 +91,33 @@ namespace Project1 {
 			// 
 			// newGameToolStripMenuItem
 			// 
+			this->newGameToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->vsHumanToolStripMenuItem,
+					this->vsComputerToolStripMenuItem
+			});
 			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
-			this->newGameToolStripMenuItem->Size = System::Drawing::Size(132, 22);
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->newGameToolStripMenuItem->Text = L"New Game";
 			this->newGameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::newGameToolStripMenuItem_Click);
+			// 
+			// vsHumanToolStripMenuItem
+			// 
+			this->vsHumanToolStripMenuItem->Name = L"vsHumanToolStripMenuItem";
+			this->vsHumanToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->vsHumanToolStripMenuItem->Text = L"vs. Human";
+			this->vsHumanToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::vsHumanToolStripMenuItem_Click);
+			// 
+			// vsComputerToolStripMenuItem
+			// 
+			this->vsComputerToolStripMenuItem->Name = L"vsComputerToolStripMenuItem";
+			this->vsComputerToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->vsComputerToolStripMenuItem->Text = L"vs. Computer";
+			this->vsComputerToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::vsComputerToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(132, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
@@ -181,6 +203,11 @@ namespace Project1 {
 
 				 drawGrid();
 				 
+				 for (int r = 0; r < 3; r++){
+					 for (int c = 0; c < 3; c++){
+						 CellArray[r, c]->setStat(0);
+					 }
+				 }
 				 
 	}
 private: System::Void pictureBox1_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -260,15 +287,20 @@ private: System::Void M_Click(System::Object^  sender, System::Windows::Forms::M
 
 			 int status = CellArray[ax, ay]->getStat();
 
-			 if (control.getStart() /*&& status == 0 && status != 3*/){
+			 if (control.getStart()){
 
-				 if (control.getCount() == 0){
+				 if (control.getCount() % 2 == 0 && status == 0){
 					 g->DrawImage(X, x + 1, y + 1, cell_height - 2, cell_height - 2);
-					 control.setCount(move + 1);
+					 control.setCount(1);
+					 CellArray[ax, ay]->setStat(1);
 				 }
-				 else if (control.getCount() == 1){
+				 else if (control.getCount() % 2 == 1 && status == 0 && control.getType() == 1){	//human opponent
 					 g->DrawImage(O, x + 1, y + 1, cell_height - 2, cell_height - 2);
-					 control.setCount(move - 1);
+					 control.setCount(1);
+					 CellArray[ax, ay]->setStat(2);
+				 }
+				 else if (control.getCount() % 2 == 1 && status == 0 && control.getType() == 2){	//cpu opponent
+
 				 }
 
 			 }
@@ -310,6 +342,38 @@ System::Void RefreshGrid(){
 private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 
 			 Close();
+}
+private: System::Void vsHumanToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 pictureBox1->Refresh();
+			 control.setStart(true);
+
+			 control.setCount(0);
+
+			 drawGrid();
+
+			 control.setType(1);
+
+			 for (int r = 0; r < 3; r++){
+				 for (int c = 0; c < 3; c++){
+					 CellArray[r, c]->setStat(0);
+				 }
+			 }
+}
+private: System::Void vsComputerToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 pictureBox1->Refresh();
+			 control.setStart(true);
+
+			 control.setCount(0);
+
+			 drawGrid();
+
+			 control.setType(2);
+
+			 for (int r = 0; r < 3; r++){
+				 for (int c = 0; c < 3; c++){
+					 CellArray[r, c]->setStat(0);
+				 }
+			 }
 }
 };
 }

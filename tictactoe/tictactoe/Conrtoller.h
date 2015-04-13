@@ -5,6 +5,7 @@ ref class controller{
 private:
 	bool gameStart;
 	int cellStatus;
+	int gameType;			//1 for human  2 for cpu
 
 	int gameCount;
 
@@ -19,4 +20,7 @@ public:
 
 	int getCount();
 	void setCount(int);
+
+	int getType();
+	void setType(int);
 };
